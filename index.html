@@ -192,7 +192,7 @@
       </div>
       <div class="legend-card lv4">
         <div class="lc-head">🔵 入力ミスの疑い</div>
-        <div class="lc-body">名前カタカナ・メール／電話／郵便番号の不備・広告コード空欄など。<strong>お客さんの入力ミス</strong>の可能性。修正対応を。</div>
+        <div class="lc-body">名前カタカナ・メール／電話／郵便番号の不備・広告コード空欄・住所への電話番号混入・住所の2重入力など<strong>お客さんの入力ミス</strong>の可能性。修正対応を。</div>
       </div>
     </div>
   </div>
@@ -296,6 +296,31 @@ function checkEmail(v) {
 }
 function checkAdv(v) { return isEmpty(v) ? '広告コードが空欄です' : null; }
 
+// ハイフンなしで5桁以上の連続数字チェック（電話番号・郵便番号混入疑い）
+function checkConsecutiveDigits(v, col) {
+  // 全角数字を半角に変換してからチェック
+  const normalized = v.replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0));
+  if (/\d{5,}/.test(normalized.replace(/-/g, ''))) {
+    // ハイフンを除いた純粋な数字の連続を確認
+    if (/(?<![0-9])\d{5,}(?![0-9])/.test(normalized) || /\d{5,}/.test(normalized.replace(/[-\-]/g,''))) {
+      return `住所に5桁以上の連続した数字があります（電話番号・郵便番号の混入疑い）`;
+    }
+  }
+  return null;
+}
+
+// 住所2重入力チェック（addr3/addr4の先頭にaddr2が含まれている）
+function checkAddrDuplicate(addrVal, a2) {
+  if (!a2 || a2.length < 4) return null;
+  const normalize = s => s.replace(/\s/g, '').replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0));
+  const normVal = normalize(addrVal);
+  const normA2  = normalize(a2);
+  if (normVal.startsWith(normA2)) {
+    return `市区町村名（addr2）が重複して入力されている可能性があります`;
+  }
+  return null;
+}
+
 // ===== 1行チェック =====
 function checkRow(row, hIdx, dupAddrFull, dupAddrPartial, manyCity) {
   const get = col => (hIdx[col]!==undefined&&row[hIdx[col]]!==undefined) ? row[hIdx[col]].trim() : '';
@@ -331,6 +356,13 @@ function checkRow(row, hIdx, dupAddrFull, dupAddrPartial, manyCity) {
   e4('owner_addr2', checkCity(a2));
   e4('owner_addr3', checkAddr(a3,a4));
   if(!cellErrs['owner_addr3']) e4('owner_addr3', checkBanchi(a1,a2,a3,a4));
+  // 連続数字チェック（addr2〜4）
+  if(!cellErrs['owner_addr2']) e4('owner_addr2', checkConsecutiveDigits(a2, 'addr2'));
+  if(!cellErrs['owner_addr3']) e4('owner_addr3', checkConsecutiveDigits(a3, 'addr3'));
+  if(!cellErrs['owner_addr4']) e4('owner_addr4', checkConsecutiveDigits(a4, 'addr4'));
+  // 住所2重入力チェック（addr3/addr4の先頭にaddr2が含まれている）
+  if(!cellErrs['owner_addr3']) e4('owner_addr3', checkAddrDuplicate(a3, a2));
+  if(!cellErrs['owner_addr4']) e4('owner_addr4', checkAddrDuplicate(a4, a2));
   e4('owner_tel1',  checkTel(get('owner_tel1')));
   e4('owner_mail_addr', checkEmail(get('owner_mail_addr')));
   e4('advcode_new', checkAdv(get('advcode_new')));
