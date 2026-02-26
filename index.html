@@ -15,275 +15,153 @@
     --border2: #c8c5bb;
     --accent: #2563eb;
     --accent-bg: #eff6ff;
-    --err: #dc2626;
-    --err-bg: #fef2f2;
-    --err-cell: #fde8e8;
-    --warn: #d97706;
-    --warn-bg: #fffbeb;
-    --warn-cell: #fef3c7;
-    --dup: #7c3aed;
-    --dup-bg: #f5f3ff;
-    --dup-cell: #ede9fe;
+    --lv1: #dc2626; --lv1-bg: #fef2f2; --lv1-cell: #fde8e8;
+    --lv2: #ea580c; --lv2-bg: #fff7ed; --lv2-cell: #ffedd5;
+    --lv3: #ca8a04; --lv3-bg: #fefce8; --lv3-cell: #fef9c3;
+    --lv4: #2563eb; --lv4-bg: #eff6ff; --lv4-cell: #dbeafe;
     --ok: #16a34a;
-    --text: #1a1a1a;
-    --text-mid: #555550;
-    --text-dim: #999990;
+    --text: #1a1a1a; --text-mid: #555550; --text-dim: #999990;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 13px;
-    min-height: 100vh;
-  }
+  body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', sans-serif; font-size: 13px; min-height: 100vh; }
 
   header {
-    background: var(--surface);
-    border-bottom: 2px solid var(--text);
-    padding: 18px 28px;
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
+    background: var(--surface); border-bottom: 2px solid var(--text);
+    padding: 18px 28px; display: flex; align-items: baseline; gap: 14px;
   }
-  .logo {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--text);
-  }
+  .logo { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 600; letter-spacing: -0.02em; }
   .logo span { color: var(--accent); }
-  .subtitle {
-    color: var(--text-dim);
-    font-size: 12px;
-  }
+  .subtitle { color: var(--text-dim); font-size: 12px; }
 
-  .main { padding: 24px 28px; max-width: 1800px; }
+  .main { padding: 20px 28px; max-width: 1800px; }
+
+  /* 説明パネル */
+  .legend-panel {
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 10px; padding: 16px 20px; margin-bottom: 16px;
+  }
+  .legend-title {
+    font-size: 11px; font-weight: 700; color: var(--text-dim);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .legend-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+  }
+  @media (max-width: 900px) { .legend-grid { grid-template-columns: repeat(2, 1fr); } }
+  .legend-card { border-radius: 8px; padding: 12px 14px; border-left: 4px solid; }
+  .legend-card.lv1 { background: var(--lv1-bg); border-color: var(--lv1); }
+  .legend-card.lv2 { background: var(--lv2-bg); border-color: var(--lv2); }
+  .legend-card.lv3 { background: var(--lv3-bg); border-color: var(--lv3); }
+  .legend-card.lv4 { background: var(--lv4-bg); border-color: var(--lv4); }
+  .lc-head { font-size: 12px; font-weight: 700; margin-bottom: 5px; }
+  .legend-card.lv1 .lc-head { color: var(--lv1); }
+  .legend-card.lv2 .lc-head { color: var(--lv2); }
+  .legend-card.lv3 .lc-head { color: var(--lv3); }
+  .legend-card.lv4 .lc-head { color: var(--lv4); }
+  .lc-body { font-size: 11px; color: var(--text-mid); line-height: 1.65; }
 
   /* Upload */
   .upload-area {
-    background: var(--surface);
-    border: 2px dashed var(--border2);
-    border-radius: 8px;
-    padding: 28px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.18s;
-    margin-bottom: 12px;
-    position: relative;
+    background: var(--surface); border: 2px dashed var(--border2); border-radius: 8px;
+    padding: 22px; text-align: center; cursor: pointer; transition: all 0.18s;
+    margin-bottom: 10px; position: relative;
   }
-  .upload-area:hover, .upload-area.drag-over {
-    border-color: var(--accent);
-    background: var(--accent-bg);
-  }
-  .upload-area input[type=file] {
-    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
-  }
+  .upload-area:hover, .upload-area.drag-over { border-color: var(--accent); background: var(--accent-bg); }
+  .upload-area input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
   .upload-text { color: var(--text-mid); font-size: 13px; }
   .upload-text strong { color: var(--accent); }
 
-  .paste-row {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    align-items: flex-start;
-  }
+  .paste-row { display: flex; gap: 10px; margin-bottom: 16px; align-items: flex-start; }
   .paste-area {
-    flex: 1;
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: 6px;
-    color: var(--text);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    padding: 10px 12px;
-    resize: vertical;
-    min-height: 72px;
-    outline: none;
-    transition: border-color 0.15s;
+    flex: 1; background: var(--surface); border: 1.5px solid var(--border); border-radius: 6px;
+    color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    padding: 10px 12px; resize: vertical; min-height: 68px; outline: none; transition: border-color 0.15s;
   }
   .paste-area:focus { border-color: var(--accent); }
   .paste-area::placeholder { color: var(--text-dim); }
-
   .btn {
-    background: var(--text);
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 10px 22px;
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: opacity 0.15s;
-    white-space: nowrap;
+    background: var(--text); color: #fff; border: none; border-radius: 6px;
+    padding: 10px 22px; font-family: 'Noto Sans JP', sans-serif; font-size: 13px;
+    font-weight: 700; cursor: pointer; transition: opacity 0.15s; white-space: nowrap;
   }
   .btn:hover { opacity: 0.8; }
 
   /* Summary */
-  .summary {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
-  }
-  .stat {
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 18px;
-    min-width: 90px;
-  }
-  .stat .n {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 26px;
-    font-weight: 600;
-    line-height: 1;
-  }
-  .stat .l { color: var(--text-dim); font-size: 11px; margin-top: 4px; }
-  .stat.s-err { border-color: var(--err); background: var(--err-bg); }
-  .stat.s-err .n { color: var(--err); }
-  .stat.s-warn { border-color: #fbbf24; background: var(--warn-bg); }
-  .stat.s-warn .n { color: var(--warn); }
-  .stat.s-dup { border-color: #a78bfa; background: var(--dup-bg); }
-  .stat.s-dup .n { color: var(--dup); }
+  .summary { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .stat { background: var(--surface); border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 16px; min-width: 85px; }
+  .stat .n { font-family: 'JetBrains Mono', monospace; font-size: 24px; font-weight: 600; line-height: 1; }
+  .stat .l { color: var(--text-dim); font-size: 11px; margin-top: 3px; }
+  .stat.s1 { border-color: var(--lv1); background: var(--lv1-bg); } .stat.s1 .n { color: var(--lv1); }
+  .stat.s2 { border-color: var(--lv2); background: var(--lv2-bg); } .stat.s2 .n { color: var(--lv2); }
+  .stat.s3 { border-color: var(--lv3); background: var(--lv3-bg); } .stat.s3 .n { color: var(--lv3); }
+  .stat.s4 { border-color: var(--lv4); background: var(--lv4-bg); } .stat.s4 .n { color: var(--lv4); }
   .stat.s-ok .n { color: var(--ok); }
 
-  /* toolbar */
-  .toolbar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    flex-wrap: wrap;
-  }
+  /* Toolbar */
+  .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
   .filter-btn {
-    font-size: 11px;
-    font-family: 'Noto Sans JP', sans-serif;
-    padding: 5px 14px;
-    border-radius: 20px;
-    border: 1.5px solid var(--border2);
-    background: var(--surface);
-    color: var(--text-mid);
-    cursor: pointer;
-    transition: all 0.12s;
+    font-size: 11px; font-family: 'Noto Sans JP', sans-serif; padding: 5px 14px;
+    border-radius: 20px; border: 1.5px solid var(--border2); background: var(--surface);
+    color: var(--text-mid); cursor: pointer; transition: all 0.12s;
   }
   .filter-btn:hover { border-color: var(--text); color: var(--text); }
-  .filter-btn.f-active { background: var(--text); border-color: var(--text); color: #fff; }
-  .filter-btn.f-err.f-active { background: var(--err); border-color: var(--err); }
-  .filter-btn.f-warn.f-active { background: var(--warn); border-color: var(--warn); }
-  .filter-btn.f-dup.f-active { background: var(--dup); border-color: var(--dup); }
-  .filter-btn.f-ok.f-active { background: var(--ok); border-color: var(--ok); }
-
+  .filter-btn.fa  { background: var(--text);  border-color: var(--text);  color: #fff; }
+  .filter-btn.f1.fa { background: var(--lv1); border-color: var(--lv1); color: #fff; }
+  .filter-btn.f2.fa { background: var(--lv2); border-color: var(--lv2); color: #fff; }
+  .filter-btn.f3.fa { background: var(--lv3); border-color: var(--lv3); color: #fff; }
+  .filter-btn.f4.fa { background: var(--lv4); border-color: var(--lv4); color: #fff; }
+  .filter-btn.fok.fa { background: var(--ok); border-color: var(--ok); color: #fff; }
   .spacer { flex: 1; }
-  .count-info {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--text-dim);
-  }
+  .count-info { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); }
   .dl-btn {
-    font-size: 11px;
-    font-family: 'Noto Sans JP', sans-serif;
-    padding: 5px 14px;
-    border-radius: 6px;
-    border: 1.5px solid var(--border2);
-    background: var(--surface);
-    color: var(--text-mid);
-    cursor: pointer;
-    transition: all 0.12s;
+    font-size: 11px; font-family: 'Noto Sans JP', sans-serif; padding: 5px 14px;
+    border-radius: 6px; border: 1.5px solid var(--border2); background: var(--surface);
+    color: var(--text-mid); cursor: pointer; transition: all 0.12s;
   }
   .dl-btn:hover { border-color: var(--accent); color: var(--accent); }
 
   /* Table */
   .table-wrap {
-    overflow: auto;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    background: var(--surface);
-    max-height: calc(100vh - 340px);
+    overflow: auto; border: 1.5px solid var(--border); border-radius: 8px;
+    background: var(--surface); max-height: calc(100vh - 400px);
   }
-
   table { width: 100%; border-collapse: collapse; font-size: 12px; }
-
   thead th {
-    background: var(--surface2);
-    color: var(--text-mid);
-    font-weight: 500;
-    padding: 8px 10px;
-    text-align: left;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    border-bottom: 1.5px solid var(--border);
-    white-space: nowrap;
-    font-size: 11px;
-    font-family: 'JetBrains Mono', monospace;
+    background: var(--surface2); color: var(--text-mid); font-weight: 500;
+    padding: 8px 10px; text-align: left; position: sticky; top: 0; z-index: 10;
+    border-bottom: 1.5px solid var(--border); white-space: nowrap;
+    font-size: 11px; font-family: 'JetBrains Mono', monospace;
   }
-
   tbody tr { border-bottom: 1px solid var(--border); }
   tbody tr:hover td { background-color: rgba(0,0,0,0.015) !important; }
-
-  td {
-    padding: 6px 10px;
-    vertical-align: middle;
-    white-space: nowrap;
-    max-width: 180px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  td.row-n {
-    color: var(--text-dim);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    min-width: 38px;
-  }
-
-  td.c-err  { background: var(--err-cell);  color: var(--err);  font-weight: 500; }
-  td.c-warn { background: var(--warn-cell); color: var(--warn); font-weight: 500; }
-  td.c-dup  { background: var(--dup-cell);  color: var(--dup);  font-weight: 500; }
+  td { padding: 6px 10px; vertical-align: middle; white-space: nowrap; max-width: 400px; overflow: hidden; text-overflow: ellipsis; }
+  td.col-short { max-width: 120px; }
+  td.row-n { color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-size: 10px; min-width: 38px; }
+  td.c1 { background: var(--lv1-cell); color: var(--lv1); font-weight: 500; }
+  td.c2 { background: var(--lv2-cell); color: var(--lv2); font-weight: 500; }
+  td.c3 { background: var(--lv3-cell); color: var(--lv3); font-weight: 500; }
+  td.c4 { background: var(--lv4-cell); color: var(--lv4); font-weight: 500; }
 
   td[data-tip] { cursor: help; position: relative; }
   td[data-tip]:hover::after {
-    content: attr(data-tip);
-    position: absolute;
-    bottom: calc(100% + 4px);
-    left: 0;
-    background: var(--text);
-    color: #fff;
-    padding: 5px 9px;
-    border-radius: 5px;
-    font-size: 11px;
-    white-space: nowrap;
-    z-index: 200;
-    pointer-events: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    max-width: 280px;
-    white-space: normal;
-    font-weight: 400;
+    content: attr(data-tip); position: absolute; bottom: calc(100% + 4px); left: 0;
+    background: var(--text); color: #fff; padding: 5px 9px; border-radius: 5px;
+    font-size: 11px; z-index: 200; pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-width: 300px; white-space: normal; font-weight: 400;
   }
 
   .badge {
-    display: inline-block;
-    font-size: 10px;
-    font-family: 'JetBrains Mono', monospace;
-    padding: 2px 7px;
-    border-radius: 4px;
-    white-space: nowrap;
-    border: 1px solid;
+    display: inline-block; font-size: 10px; font-family: 'JetBrains Mono', monospace;
+    padding: 2px 8px; border-radius: 4px; white-space: nowrap; border: 1px solid;
   }
-  .b-err  { background: var(--err-bg);  color: var(--err);  border-color: #fca5a5; }
-  .b-warn { background: var(--warn-bg); color: var(--warn); border-color: #fcd34d; }
-  .b-dup  { background: var(--dup-bg);  color: var(--dup);  border-color: #c4b5fd; }
-  .b-ok   { color: var(--ok); font-size: 11px; font-family: 'JetBrains Mono', monospace; }
+  .b1 { background: var(--lv1-bg); color: var(--lv1); border-color: #fca5a5; }
+  .b2 { background: var(--lv2-bg); color: var(--lv2); border-color: #fdba74; }
+  .b3 { background: var(--lv3-bg); color: var(--lv3); border-color: #fde047; }
+  .b4 { background: var(--lv4-bg); color: var(--lv4); border-color: #93c5fd; }
+  .bok { color: var(--ok); font-size: 11px; font-family: 'JetBrains Mono', monospace; }
 
-  .empty {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--text-dim);
-  }
+  .empty { text-align: center; padding: 60px 20px; color: var(--text-dim); }
   .empty .icon { font-size: 38px; margin-bottom: 10px; }
 </style>
 </head>
@@ -296,6 +174,30 @@
 
 <div class="main">
 
+  <!-- 4段階説明パネル -->
+  <div class="legend-panel">
+    <div class="legend-title">チェックレベルの説明</div>
+    <div class="legend-grid">
+      <div class="legend-card lv1">
+        <div class="lc-head">🔴 住所完全一致</div>
+        <div class="lc-body">同一住所への複数申込。定期初回は1世帯1回のため<strong>不正注文の可能性が高い</strong>。要キャンセル確認。</div>
+      </div>
+      <div class="legend-card lv2">
+        <div class="lc-head">🟠 住所号室以外一致</div>
+        <div class="lc-body">同じ建物の別部屋からの申込。家族・同居人などによる<strong>複数申込の疑い</strong>あり。要確認。</div>
+      </div>
+      <div class="legend-card lv3">
+        <div class="lc-head">🟡 住所一部一致（3件以上）</div>
+        <div class="lc-body">同じ市区町村から3件以上の申込。転売目的などの<strong>不正注文の可能性</strong>あり。状況に応じて確認。</div>
+      </div>
+      <div class="legend-card lv4">
+        <div class="lc-head">🔵 入力ミスの疑い</div>
+        <div class="lc-body">名前カタカナ・メール／電話／郵便番号の不備・広告コード空欄など。<strong>お客さんの入力ミス</strong>の可能性。修正対応を。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload -->
   <div class="upload-area" id="dropZone">
     <input type="file" id="fileInput" accept=".csv">
     <div class="upload-text">📂 &nbsp;<strong>CSVファイルをドロップ</strong>、またはクリックして選択（UTF-8 / Shift-JIS 対応）</div>
@@ -310,10 +212,7 @@
     <div class="summary" id="summaryArea"></div>
     <div class="toolbar" id="toolbarArea"></div>
     <div class="table-wrap">
-      <table>
-        <thead id="thead"></thead>
-        <tbody id="tbody"></tbody>
-      </table>
+      <table><thead id="thead"></thead><tbody id="tbody"></tbody></table>
     </div>
   </div>
 
@@ -328,7 +227,6 @@
 </div>
 
 <script>
-// ===== 定数 =====
 const PREFECTURES = ['北海道','青森県','岩手県','宮城県','秋田県','山形県','福島県',
   '茨城県','栃木県','群馬県','埼玉県','千葉県','東京都','神奈川県',
   '新潟県','富山県','石川県','福井県','山梨県','長野県','岐阜県','静岡県','愛知県',
@@ -337,420 +235,238 @@ const PREFECTURES = ['北海道','青森県','岩手県','宮城県','秋田県'
   '徳島県','香川県','愛媛県','高知県',
   '福岡県','佐賀県','長崎県','熊本県','大分県','宮崎県','鹿児島県','沖縄県'];
 
-// チェック対象列（CSVヘッダー名 → チェック関数の識別キー）
-const CHECK_COLS = {
-  owner_name1:    'name1',
-  owner_name2:    'name2',
-  owner_zip:      'zip',
-  owner_addr1:    'addr1',
-  owner_addr2:    'addr2',
-  owner_addr3:    'addr3',
-  owner_addr4:    'addr4',
-  owner_tel1:     'tel',
-  owner_mail_addr:'email',
-  advcode_new:    'adv',
-};
-
 // ===== CSV パース =====
 function parseCSV(text) {
-  // BOM除去
   text = text.replace(/^\uFEFF/, '');
   const lines = text.trim().split(/\r?\n/);
   if (lines.length < 2) return null;
-  const firstLine = lines[0];
-  const delim = (firstLine.match(/\t/g)||[]).length > (firstLine.match(/,/g)||[]).length ? '\t' : ',';
-
+  const d = (lines[0].match(/\t/g)||[]).length > (lines[0].match(/,/g)||[]).length ? '\t' : ',';
   const parseRow = line => {
-    const cells = []; let cur = ''; let inQ = false;
-    for (let i = 0; i < line.length; i++) {
-      const c = line[i];
-      if (c === '"') { if (inQ && line[i+1]==='"') { cur+='"'; i++; } else inQ=!inQ; }
-      else if (c === delim && !inQ) { cells.push(cur); cur = ''; }
-      else cur += c;
+    const cells=[]; let cur=''; let inQ=false;
+    for (let i=0;i<line.length;i++) {
+      const c=line[i];
+      if(c==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}
+      else if(c===d&&!inQ){cells.push(cur);cur='';}
+      else cur+=c;
     }
     cells.push(cur);
-    return cells.map(s => s.trim());
+    return cells.map(s=>s.trim());
   };
-
-  const headers = parseRow(lines[0]);
-  const rows = lines.slice(1).filter(l => l.trim()).map(parseRow);
-  return { headers, rows };
+  return { headers: parseRow(lines[0]), rows: lines.slice(1).filter(l=>l.trim()).map(parseRow) };
 }
 
-// ===== バリデーター =====
-function hasKatakana(s) {
-  return /[\u30A0-\u30FF]/.test(s);
-}
-function isEmpty(s) { return !s || !s.trim(); }
-function hasMojibake(s) { return /[\ufffd\u0080-\u009f]/.test(s); }
-
-function checkName(val, label) {
-  if (isEmpty(val)) return { level: 'error', msg: `${label}が空欄です` };
-  if (hasMojibake(val)) return { level: 'error', msg: '文字化けの可能性があります' };
-  if (hasKatakana(val)) return { level: 'warn', msg: `${label}にカタカナが含まれています（通常は漢字/ひらがな）` };
-  return null;
-}
-
-function checkZip(val) {
-  if (isEmpty(val)) return { level: 'error', msg: '郵便番号が空欄です' };
-  const clean = val.replace(/[^\d]/g, '');
-  if (clean.length !== 7) return { level: 'error', msg: `郵便番号は7桁必要です（現在${clean.length}桁）` };
-  return null;
-}
-
-function checkPref(val) {
-  if (isEmpty(val)) return { level: 'error', msg: '都道府県が空欄です' };
-  if (!PREFECTURES.includes(val.trim())) return { level: 'warn', msg: `「${val}」は都道府県名として認識できません` };
-  return null;
-}
-
-function checkCity(val) {
-  if (isEmpty(val)) return { level: 'error', msg: '市区町村が空欄です' };
-  return null;
-}
-
-function checkAddr(val, colName) {
-  if (isEmpty(val)) return null;
-  if (hasMojibake(val)) return { level: 'error', msg: '文字化けの可能性があります' };
-  return null;
-}
-
-// addr1〜addr4の結合文字列から番地チェック（半角・全角数字どちらでもOK）
-function hasBanchi(combined) {
-  return /[\d０-９]/.test(combined);
-}
-
-// addr2〜4の結合文字列から末尾の「号室・部屋番号」表現を除去してベース住所を返す
-// 例: "横浜市神奈川区2-3-4 101号室" → "横浜市神奈川区2-3-4"
-// 例: "渋谷区恵比寿1-2-3グランドハイツ" + "305" → ベースは "渋谷区恵比寿1-2-3グランドハイツ"
+// ===== ユーティリティ =====
+const isEmpty = s => !s||!s.trim();
+const hasKatakana = s => /[\u30A0-\u30FF]/.test(s);
+const hasMojibake = s => /[\ufffd\u0080-\u009f]/.test(s);
+const hasBanchi = s => /[\d０-９]/.test(s);
 function stripRoomNum(s) {
-  return s
-    .replace(/\s/g, '')
-    // 末尾の「数字+号室/室/F/階」パターンを除去
-    .replace(/[\d０-９]+[号室階Ff]+$/, '')
-    // 末尾が純粋な数字だけの場合も除去（addr4に号室番号だけ入るケース）
-    .replace(/[\d０-９]+$/, '');
+  return s.replace(/\s/g,'').replace(/[\d０-９]+[号室階Ff]+$/,'').replace(/[\d０-９]+$/,'');
 }
 
-function checkTel(val) {
-  if (isEmpty(val)) return { level: 'error', msg: '電話番号が空欄です' };
-  const d = val.replace(/[\-\s\u30FC\uFF0D\u2212]/g, '');
-  if (!/^0\d{9,10}$/.test(d)) return { level: 'error', msg: `電話番号の形式が不正です（${val}）` };
+// ===== バリデーター（lv4 入力ミス系） =====
+function checkName(v,label) {
+  if(isEmpty(v)) return `${label}が空欄です`;
+  if(hasMojibake(v)) return `${label}に文字化けの可能性があります`;
+  if(hasKatakana(v)) return `${label}にカタカナが含まれています`;
   return null;
 }
-
-function checkEmail(val) {
-  if (isEmpty(val)) return { level: 'error', msg: 'メールアドレスが空欄です' };
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val.trim())) return { level: 'error', msg: 'メールアドレスの形式が不正です' };
+function checkZip(v) {
+  if(isEmpty(v)) return '郵便番号が空欄です';
+  if(!/^\d{3}-?\d{4}$/.test(v.trim())) return '郵便番号の形式が不正です（7桁）';
   return null;
 }
-
-function checkAdv(val) {
-  if (isEmpty(val)) return { level: 'warn', msg: '広告コードが空欄です' };
+function checkPref(v) {
+  if(isEmpty(v)) return '都道府県が空欄です';
+  if(!PREFECTURES.includes(v.trim())) return `「${v}」は都道府県名として認識できません`;
   return null;
 }
+function checkCity(v) { return isEmpty(v) ? '市区町村が空欄です' : null; }
+function checkAddr(a3,a4) { return (!a3&&!a4) ? '番地・建物名（addr3/addr4）が両方空欄です' : null; }
+function checkBanchi(a1,a2,a3,a4) { return hasBanchi(a1+a2+a3+a4) ? null : '住所全体に番地（数字）が含まれていません'; }
+function checkTel(v) {
+  if(isEmpty(v)) return '電話番号が空欄です';
+  if(!/^0\d{9,10}$/.test(v.replace(/[\-\s\u30FC\uFF0D]/g,''))) return '電話番号の形式が不正です';
+  return null;
+}
+function checkEmail(v) {
+  if(isEmpty(v)) return 'メールアドレスが空欄です';
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim())) return 'メールアドレスの形式が不正です';
+  return null;
+}
+function checkAdv(v) { return isEmpty(v) ? '広告コードが空欄です' : null; }
 
 // ===== 1行チェック =====
-function checkRow(row, headers, hIdx, dupPhone, dupEmail, dupAddr, dupAddrPartial, manyCity) {
-  const get = col => (hIdx[col] !== undefined && row[hIdx[col]] !== undefined) ? row[hIdx[col]].trim() : '';
+function checkRow(row, hIdx, dupAddrFull, dupAddrPartial, manyCity) {
+  const get = col => (hIdx[col]!==undefined&&row[hIdx[col]]!==undefined) ? row[hIdx[col]].trim() : '';
   const cellErrs = {};
+  const set = (col,lv,msg) => { if(!cellErrs[col]||cellErrs[col].lv>lv) cellErrs[col]={lv,msg}; };
 
-  const run = (colName, fn) => {
-    const result = fn(get(colName));
-    if (result) cellErrs[colName] = result;
-  };
+  const a1=get('owner_addr1'),a2=get('owner_addr2'),a3=get('owner_addr3'),a4=get('owner_addr4');
 
-  run('owner_name1', v => checkName(v, '姓'));
-  run('owner_name2', v => checkName(v, '名'));
-  run('owner_zip',   checkZip);
-  run('owner_addr1', checkPref);
-  run('owner_addr2', checkCity);
-  run('owner_addr3', v => checkAddr(v, 'addr3'));
-  run('owner_addr4', v => checkAddr(v, 'addr4'));
-  run('owner_tel1',  checkTel);
-  run('owner_mail_addr', checkEmail);
-  run('advcode_new', checkAdv);
-
-  // addr1〜addr4 合算チェック
-  const a1 = get('owner_addr1'), a2 = get('owner_addr2');
-  const a3 = get('owner_addr3'), a4 = get('owner_addr4');
-
-  // addr3+addr4 両方空欄
-  if (!a3 && !a4) {
-    cellErrs['owner_addr3'] = { level: 'error', msg: '番地・建物名（addr3/addr4）が両方空欄です' };
+  // lv1: 住所完全一致
+  const fullKey = (a1+a2+a3+a4).replace(/\s/g,'');
+  if(fullKey.length>5 && dupAddrFull.has(fullKey)) {
+    ['owner_addr1','owner_addr2','owner_addr3','owner_addr4'].forEach(c=>set(c,1,'住所が完全に一致する別の行があります（同一住所への複数申込）'));
   }
 
-  // addr1〜addr4の結合全体に数字がない → 番地なし警告
-  const addrAll = a1 + a2 + a3 + a4;
-  if (addrAll.trim() && !hasBanchi(addrAll)) {
-    if (!cellErrs['owner_addr3'] || cellErrs['owner_addr3'].level === 'warn') {
-      cellErrs['owner_addr3'] = { level: 'warn', msg: '住所全体に番地（数字）が含まれていません' };
-    }
+  // lv2: 号室以外住所一致
+  const partKey = (a1+stripRoomNum(a2+a3+a4)).replace(/\s/g,'');
+  if(partKey.length>5 && dupAddrPartial.has(partKey) && !dupAddrFull.has(fullKey)) {
+    ['owner_addr1','owner_addr2','owner_addr3'].forEach(c=>set(c,2,'号室・部屋番号以外の住所が一致する行があります'));
   }
 
-  // 電話番号重複
-  const tel = get('owner_tel1').replace(/[\-\s]/g,'');
-  if (tel && dupPhone.has(tel) && !cellErrs['owner_tel1']) {
-    cellErrs['owner_tel1'] = { level: 'dup', msg: '同じ電話番号が複数行に存在します' };
-  }
-
-  // メール重複
-  const email = get('owner_mail_addr').toLowerCase();
-  if (email && dupEmail.has(email) && !cellErrs['owner_mail_addr']) {
-    cellErrs['owner_mail_addr'] = { level: 'dup', msg: '同じメールアドレスが複数行に存在します' };
-  }
-
-  // 住所完全一致（addr1〜4すべて同じ）
-  const addrFullKey = (a1+a2+a3+a4).replace(/\s/g,'');
-  if (addrFullKey.length > 5 && dupAddr.has(addrFullKey)) {
-    ['owner_addr1','owner_addr2','owner_addr3'].forEach(c => {
-      if (!cellErrs[c]) cellErrs[c] = { level: 'dup', msg: '住所が完全に一致する行が他にあります' };
-    });
-  }
-
-  // 住所ほぼ一致（addr2〜4結合の号室部分を除いたベースが同じ）
-  // addr3に建物名+号室が入っていてaddr4空でも、addr4に号室が入っていても両方対応
-  const addrPartKey = (a1 + stripRoomNum(a2+a3+a4)).replace(/\s/g,'');
-  if (addrPartKey.length > 5 && dupAddrPartial.has(addrPartKey) && !dupAddr.has(addrFullKey)) {
-    ['owner_addr1','owner_addr2','owner_addr3'].forEach(c => {
-      if (!cellErrs[c]) cellErrs[c] = { level: 'warn', msg: '同じ建物で号室だけ違う可能性のある住所が他の行にあります' };
-    });
-  }
-
-  // 同一市区町村3件以上
+  // lv3: 同一市区町村3件以上
   const cityKey = (a1+a2).replace(/\s/g,'');
-  if (cityKey.length > 3 && manyCity.has(cityKey) && !cellErrs['owner_addr2']) {
-    cellErrs['owner_addr2'] = { level: 'warn', msg: `同じ市区町村の注文が${G.cityCnt[cityKey]}件あります` };
+  if(cityKey.length>3 && manyCity.has(cityKey)) {
+    set('owner_addr2',3,`同じ市区町村の申込が${G.cityCnt[cityKey]}件あります`);
   }
 
-  const errors = Object.values(cellErrs);
-  const maxLevel = errors.some(e=>e.level==='error') ? 'error'
-    : errors.some(e=>e.level==='dup') ? 'dup'
-    : errors.some(e=>e.level==='warn') ? 'warn' : 'ok';
+  // lv4: 入力ミス系
+  const e4=(col,msg)=>{ if(msg) set(col,4,msg); };
+  e4('owner_name1', checkName(get('owner_name1'),'姓'));
+  e4('owner_name2', checkName(get('owner_name2'),'名'));
+  e4('owner_zip',   checkZip(get('owner_zip')));
+  e4('owner_addr1', checkPref(a1));
+  e4('owner_addr2', checkCity(a2));
+  e4('owner_addr3', checkAddr(a3,a4));
+  if(!cellErrs['owner_addr3']) e4('owner_addr3', checkBanchi(a1,a2,a3,a4));
+  e4('owner_tel1',  checkTel(get('owner_tel1')));
+  e4('owner_mail_addr', checkEmail(get('owner_mail_addr')));
+  e4('advcode_new', checkAdv(get('advcode_new')));
 
-  return { cellErrs, maxLevel };
+  const lvs = Object.values(cellErrs).map(e=>e.lv);
+  const maxLv = lvs.length>0 ? Math.min(...lvs) : 0;
+  return { cellErrs, maxLv };
 }
 
 // ===== メイン処理 =====
-let G = { headers: [], rows: [], rowResults: [], hIdx: {} };
+let G = { headers:[], rows:[], rowResults:[], hIdx:{}, cityCnt:{} };
 let activeFilter = 'all';
 
 function process(text) {
   const parsed = parseCSV(text);
-  if (!parsed) { alert('CSVの解析に失敗しました。'); return; }
+  if(!parsed){ alert('CSVの解析に失敗しました。'); return; }
+  G.headers=parsed.headers; G.rows=parsed.rows;
+  G.hIdx={}; G.headers.forEach((h,i)=>{ G.hIdx[h]=i; });
 
-  G.headers = parsed.headers;
-  G.rows = parsed.rows;
-
-  // ヘッダー → インデックス
-  G.hIdx = {};
-  G.headers.forEach((h, i) => { G.hIdx[h] = i; });
-
-  // 重複マップ
-  const phoneCnt = {}, emailCnt = {}, addrCnt = {};
-  // 住所ほぼ一致（addr1+2+3が同じ → 号室だけ違うケース検出）
-  const addrPartialCnt = {};
-  // 同一市区町村カウント（addr1+addr2の組み合わせ）
-  const cityCnt = {};
-
-  G.rows.forEach(row => {
-    const get = col => (G.hIdx[col] !== undefined && row[G.hIdx[col]] !== undefined) ? row[G.hIdx[col]].trim() : '';
-    const tel = get('owner_tel1').replace(/[\-\s]/g,'');
-    if (tel) phoneCnt[tel] = (phoneCnt[tel]||0) + 1;
-    const email = get('owner_mail_addr').toLowerCase();
-    if (email) emailCnt[email] = (emailCnt[email]||0) + 1;
-    // 完全一致キー（addr1〜4すべて）
-    const addr = (get('owner_addr1')+get('owner_addr2')+get('owner_addr3')+get('owner_addr4')).replace(/\s/g,'');
-    if (addr.length > 5) addrCnt[addr] = (addrCnt[addr]||0) + 1;
-    // ほぼ一致キー：addr1+addr2+addr3+addr4の結合から【末尾の数字・号室表現を除去】したもの
-    // → addr3に建物名まで入っていてaddr4が空のケースも、addr4に号室が入るケースも両方対応
-    const addrBody = stripRoomNum(get('owner_addr2')+get('owner_addr3')+get('owner_addr4'));
-    const addrP = (get('owner_addr1') + addrBody).replace(/\s/g,'');
-    if (addrP.length > 5) addrPartialCnt[addrP] = (addrPartialCnt[addrP]||0) + 1;
-    // 市区町村キー（addr1+addr2）
-    const cityKey = (get('owner_addr1')+get('owner_addr2')).replace(/\s/g,'');
-    if (cityKey.length > 3) cityCnt[cityKey] = (cityCnt[cityKey]||0) + 1;
+  const fullCnt={}, partCnt={}, cityCnt={};
+  G.rows.forEach(row=>{
+    const get=col=>(G.hIdx[col]!==undefined&&row[G.hIdx[col]]!==undefined)?row[G.hIdx[col]].trim():'';
+    const a1=get('owner_addr1'),a2=get('owner_addr2'),a3=get('owner_addr3'),a4=get('owner_addr4');
+    const fk=(a1+a2+a3+a4).replace(/\s/g,'');
+    if(fk.length>5) fullCnt[fk]=(fullCnt[fk]||0)+1;
+    const pk=(a1+stripRoomNum(a2+a3+a4)).replace(/\s/g,'');
+    if(pk.length>5) partCnt[pk]=(partCnt[pk]||0)+1;
+    const ck=(a1+a2).replace(/\s/g,'');
+    if(ck.length>3) cityCnt[ck]=(cityCnt[ck]||0)+1;
   });
-  const dupPhone   = new Set(Object.keys(phoneCnt).filter(k=>phoneCnt[k]>1));
-  const dupEmail   = new Set(Object.keys(emailCnt).filter(k=>emailCnt[k]>1));
-  const dupAddr    = new Set(Object.keys(addrCnt).filter(k=>addrCnt[k]>1));
-  // addr1+2+3一致が2件以上（完全一致は除外 → checkRow内で区別）
-  const dupAddrPartial = new Set(Object.keys(addrPartialCnt).filter(k=>addrPartialCnt[k]>1));
-  // 同一市区町村3件以上
-  const manyCity = new Set(Object.keys(cityCnt).filter(k=>cityCnt[k]>=3));
-  // 各市区町村の件数も渡す
+  const dupFull    = new Set(Object.keys(fullCnt).filter(k=>fullCnt[k]>1));
+  const dupPartial = new Set(Object.keys(partCnt).filter(k=>partCnt[k]>1));
+  const manyCity   = new Set(Object.keys(cityCnt).filter(k=>cityCnt[k]>=3));
   G.cityCnt = cityCnt;
 
-  G.rowResults = G.rows.map(row => checkRow(row, G.headers, G.hIdx, dupPhone, dupEmail, dupAddr, dupAddrPartial, manyCity));
-
-  activeFilter = 'all';
+  G.rowResults = G.rows.map(row=>checkRow(row,G.hIdx,dupFull,dupPartial,manyCity));
+  activeFilter='all';
   render();
 }
 
+// ===== 描画 =====
 function render() {
-  document.getElementById('emptyState').style.display = 'none';
-  document.getElementById('results').style.display = 'block';
-
-  const total = G.rows.length;
-  const errN  = G.rowResults.filter(r=>r.maxLevel==='error').length;
-  const dupN  = G.rowResults.filter(r=>r.maxLevel==='dup').length;
-  const warnN = G.rowResults.filter(r=>r.maxLevel==='warn').length;
-  const okN   = G.rowResults.filter(r=>r.maxLevel==='ok').length;
-
-  // サマリー
-  document.getElementById('summaryArea').innerHTML = `
+  document.getElementById('emptyState').style.display='none';
+  document.getElementById('results').style.display='block';
+  const total=G.rows.length;
+  const n=[0,1,2,3,4].map(lv=>G.rowResults.filter(r=>r.maxLv===lv).length);
+  document.getElementById('summaryArea').innerHTML=`
     <div class="stat"><div class="n">${total}</div><div class="l">総件数</div></div>
-    <div class="stat s-err"><div class="n">${errN}</div><div class="l">要修正エラー</div></div>
-    <div class="stat s-warn"><div class="n">${warnN}</div><div class="l">警告（要確認）</div></div>
-    <div class="stat s-dup"><div class="n">${dupN}</div><div class="l">重複</div></div>
-    <div class="stat s-ok"><div class="n">${okN}</div><div class="l">問題なし</div></div>
-  `;
-
+    <div class="stat s1"><div class="n">${n[1]}</div><div class="l">🔴 住所完全一致</div></div>
+    <div class="stat s2"><div class="n">${n[2]}</div><div class="l">🟠 号室以外一致</div></div>
+    <div class="stat s3"><div class="n">${n[3]}</div><div class="l">🟡 同一市区町村3件+</div></div>
+    <div class="stat s4"><div class="n">${n[4]}</div><div class="l">🔵 入力ミス疑い</div></div>
+    <div class="stat s-ok"><div class="n">${n[0]}</div><div class="l">✓ 問題なし</div></div>`;
   renderTable();
 }
 
 function renderTable() {
-  // フィルタリング
-  let indices = G.rows.map((_,i)=>i);
-  if (activeFilter==='error') indices = indices.filter(i=>G.rowResults[i].maxLevel==='error');
-  else if (activeFilter==='warn')  indices = indices.filter(i=>['error','warn'].includes(G.rowResults[i].maxLevel));
-  else if (activeFilter==='dup')   indices = indices.filter(i=>G.rowResults[i].maxLevel==='dup');
-  else if (activeFilter==='ok')    indices = indices.filter(i=>G.rowResults[i].maxLevel==='ok');
-  else if (activeFilter==='ng')    indices = indices.filter(i=>G.rowResults[i].maxLevel!=='ok');
+  let idx=G.rows.map((_,i)=>i);
+  if(activeFilter==='lv1') idx=idx.filter(i=>G.rowResults[i].maxLv===1);
+  else if(activeFilter==='lv2') idx=idx.filter(i=>G.rowResults[i].maxLv===2);
+  else if(activeFilter==='lv3') idx=idx.filter(i=>G.rowResults[i].maxLv===3);
+  else if(activeFilter==='lv4') idx=idx.filter(i=>G.rowResults[i].maxLv===4);
+  else if(activeFilter==='ok')  idx=idx.filter(i=>G.rowResults[i].maxLv===0);
+  else if(activeFilter==='ng')  idx=idx.filter(i=>G.rowResults[i].maxLv>0);
 
-  // ツールバー
-  const filters = [
-    { id:'all',   label:'すべて',       cls:'' },
-    { id:'ng',    label:'問題あり',      cls:'f-err' },
-    { id:'error', label:'エラーのみ',    cls:'f-err' },
-    { id:'warn',  label:'警告含む',      cls:'f-warn' },
-    { id:'dup',   label:'重複のみ',      cls:'f-dup' },
-    { id:'ok',    label:'問題なし',      cls:'f-ok' },
+  const filters=[
+    {id:'all',label:'すべて',cls:''},
+    {id:'ng', label:'問題あり',cls:'f1'},
+    {id:'lv1',label:'🔴 住所完全一致',cls:'f1'},
+    {id:'lv2',label:'🟠 号室以外一致',cls:'f2'},
+    {id:'lv3',label:'🟡 同一市区町村',cls:'f3'},
+    {id:'lv4',label:'🔵 入力ミス',cls:'f4'},
+    {id:'ok', label:'✓ 問題なし',cls:'fok'},
   ];
-  document.getElementById('toolbarArea').innerHTML =
-    filters.map(f=>`<button class="filter-btn ${f.cls}${activeFilter===f.id?' f-active':''}" onclick="setFilter('${f.id}')">${f.label}</button>`).join('')
-    + `<div class="spacer"></div>`
-    + `<span class="count-info">${indices.length} / ${G.rows.length} 件表示</span>`
-    + `<button class="dl-btn" onclick="downloadFiltered()">⬇ 表示中をDL</button>`
-    + `<button class="dl-btn" onclick="downloadNg()">⬇ 問題あり行のみDL</button>`;
+  document.getElementById('toolbarArea').innerHTML=
+    filters.map(f=>`<button class="filter-btn ${f.cls}${activeFilter===f.id?' fa':''}" onclick="setFilter('${f.id}')">${f.label}</button>`).join('')
+    +`<div class="spacer"></div>`
+    +`<span class="count-info">${idx.length} / ${G.rows.length} 件表示</span>`
+    +`<button class="dl-btn" onclick="downloadFiltered()">⬇ 表示中をDL</button>`
+    +`<button class="dl-btn" onclick="downloadNg()">⬇ 問題あり行のみDL</button>`;
 
-  // ヘッダー
-  document.getElementById('thead').innerHTML = `<tr>
-    <th>#</th><th>状態</th>
-    ${G.headers.map(h=>`<th>${esc(h)}</th>`).join('')}
-  </tr>`;
+  document.getElementById('thead').innerHTML=`<tr><th>#</th><th>状態</th>${G.headers.map(h=>`<th>${esc(h)}</th>`).join('')}</tr>`;
 
-  // ボディ
-  const tbody = document.getElementById('tbody');
-  if (indices.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="${G.headers.length+2}" style="text-align:center;color:var(--text-dim);padding:28px">該当する行がありません</td></tr>`;
-    return;
-  }
+  const tbody=document.getElementById('tbody');
+  if(idx.length===0){ tbody.innerHTML=`<tr><td colspan="${G.headers.length+2}" style="text-align:center;color:var(--text-dim);padding:28px">該当する行がありません</td></tr>`; return; }
 
-  let html = '';
-  for (const ri of indices) {
-    const row = G.rows[ri];
-    const { cellErrs, maxLevel } = G.rowResults[ri];
+  const SHORT=new Set(['order_id','variation_id','user_id']);
+  const BADGE={1:`<span class="badge b1">🔴 住所完全一致</span>`,2:`<span class="badge b2">🟠 号室以外一致</span>`,3:`<span class="badge b3">🟡 同一市区町村3件+</span>`,4:`<span class="badge b4">🔵 入力ミス疑い</span>`,0:`<span class="bok">✓</span>`};
 
-    let badge = '';
-    if (maxLevel==='error') {
-      const n = Object.values(cellErrs).filter(e=>e.level==='error').length;
-      badge = `<span class="badge b-err">✕ エラー ${n}件</span>`;
-    } else if (maxLevel==='dup') {
-      badge = `<span class="badge b-dup">⊕ 重複あり</span>`;
-    } else if (maxLevel==='warn') {
-      const n = Object.values(cellErrs).filter(e=>e.level==='warn').length;
-      badge = `<span class="badge b-warn">△ 警告 ${n}件</span>`;
-    } else {
-      badge = `<span class="b-ok">✓</span>`;
-    }
-
-    const cells = G.headers.map((h, ci) => {
-      const val = row[ci] !== undefined ? row[ci] : '';
-      const err = cellErrs[h];
-      if (!err) return `<td>${esc(val)}</td>`;
-      const cls = err.level==='error' ? 'c-err' : err.level==='dup' ? 'c-dup' : 'c-warn';
-      return `<td class="${cls}" data-tip="${esc(err.msg)}" title="${esc(err.msg)}">${esc(val)||'&nbsp;'}</td>`;
+  let html='';
+  for(const ri of idx){
+    const row=G.rows[ri];
+    const {cellErrs,maxLv}=G.rowResults[ri];
+    const cells=G.headers.map((h,ci)=>{
+      const val=row[ci]!==undefined?row[ci]:'';
+      const err=cellErrs[h];
+      const sc=SHORT.has(h)?' col-short':'';
+      if(!err) return `<td class="${sc.trim()}">${esc(val)}</td>`;
+      return `<td class="c${err.lv}${sc}" data-tip="${esc(err.msg)}" title="${esc(err.msg)}">${esc(val)||'&nbsp;'}</td>`;
     }).join('');
-
-    html += `<tr><td class="row-n">${ri+2}</td><td>${badge}</td>${cells}</tr>`;
+    html+=`<tr><td class="row-n">${ri+2}</td><td>${BADGE[maxLv]||BADGE[0]}</td>${cells}</tr>`;
   }
-  tbody.innerHTML = html;
+  tbody.innerHTML=html;
 }
 
-function setFilter(f) {
-  activeFilter = f;
-  renderTable();
+function setFilter(f){ activeFilter=f; renderTable(); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function toCSV(indices){ const l=[G.headers.join(',')]; indices.forEach(i=>l.push(G.rows[i].map(c=>`"${String(c).replace(/"/g,'""')}"`).join(','))); return '\uFEFF'+l.join('\n'); }
+function dlCSV(c,n){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([c],{type:'text/csv;charset=utf-8;'})); a.download=n; a.click(); }
+function today(){ return new Date().toISOString().slice(0,10); }
+function downloadNg(){ const i=G.rows.map((_,i)=>i).filter(i=>G.rowResults[i].maxLv>0); if(!i.length){alert('問題のある行はありません！');return;} dlCSV(toCSV(i),`ng_orders_${today()}.csv`); }
+function downloadFiltered(){
+  let i=G.rows.map((_,j)=>j);
+  if(activeFilter==='lv1') i=i.filter(j=>G.rowResults[j].maxLv===1);
+  else if(activeFilter==='lv2') i=i.filter(j=>G.rowResults[j].maxLv===2);
+  else if(activeFilter==='lv3') i=i.filter(j=>G.rowResults[j].maxLv===3);
+  else if(activeFilter==='lv4') i=i.filter(j=>G.rowResults[j].maxLv===4);
+  else if(activeFilter==='ok')  i=i.filter(j=>G.rowResults[j].maxLv===0);
+  else if(activeFilter==='ng')  i=i.filter(j=>G.rowResults[j].maxLv>0);
+  dlCSV(toCSV(i),`filtered_orders_${today()}.csv`);
 }
 
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function runFromPaste(){ const t=document.getElementById('pasteArea').value.trim(); if(!t){alert('CSVデータを貼り付けてください。');return;} process(t); }
+function readFile(file){
+  const tryRead=enc=>new Promise((res,rej)=>{ const r=new FileReader(); r.onload=e=>res(e.target.result); r.onerror=rej; r.readAsText(file,enc); });
+  tryRead('UTF-8').then(text=>/\ufffd/.test(text)?tryRead('Shift-JIS'):text).then(text=>process(text)).catch(()=>alert('ファイルの読み込みに失敗しました。'));
 }
+document.getElementById('fileInput').addEventListener('change',e=>{ if(e.target.files[0]) readFile(e.target.files[0]); });
+const dz=document.getElementById('dropZone');
+dz.addEventListener('dragover',e=>{ e.preventDefault(); dz.classList.add('drag-over'); });
+dz.addEventListener('dragleave',()=>dz.classList.remove('drag-over'));
+dz.addEventListener('drop',e=>{ e.preventDefault(); dz.classList.remove('drag-over'); if(e.dataTransfer.files[0]) readFile(e.dataTransfer.files[0]); });
 
-// ===== DL =====
-function toCSV(indices) {
-  const lines = [G.headers.join(',')];
-  indices.forEach(i => lines.push(G.rows[i].map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')));
-  return '\uFEFF' + lines.join('\n');
-}
-function dlCSV(content, filename) {
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([content],{type:'text/csv;charset=utf-8;'}));
-  a.download = filename;
-  a.click();
-}
-function downloadNg() {
-  const idx = G.rows.map((_,i)=>i).filter(i=>G.rowResults[i].maxLevel!=='ok');
-  if (!idx.length) { alert('問題のある行はありません！'); return; }
-  dlCSV(toCSV(idx), `ng_orders_${today()}.csv`);
-}
-function downloadFiltered() {
-  let indices = G.rows.map((_,i)=>i);
-  if (activeFilter==='error') indices = indices.filter(i=>G.rowResults[i].maxLevel==='error');
-  else if (activeFilter==='warn') indices = indices.filter(i=>['error','warn'].includes(G.rowResults[i].maxLevel));
-  else if (activeFilter==='dup') indices = indices.filter(i=>G.rowResults[i].maxLevel==='dup');
-  else if (activeFilter==='ok') indices = indices.filter(i=>G.rowResults[i].maxLevel==='ok');
-  else if (activeFilter==='ng') indices = indices.filter(i=>G.rowResults[i].maxLevel!=='ok');
-  dlCSV(toCSV(indices), `filtered_orders_${today()}.csv`);
-}
-function today() { return new Date().toISOString().slice(0,10); }
-
-// ===== File input =====
-function runFromPaste() {
-  const t = document.getElementById('pasteArea').value.trim();
-  if (!t) { alert('CSVデータを貼り付けてください。'); return; }
-  process(t);
-}
-
-// UTF-8で読む → 失敗したらShift-JISで再試行
-function readFile(file) {
-  const tryRead = (enc) => new Promise((res, rej) => {
-    const r = new FileReader();
-    r.onload = e => res(e.target.result);
-    r.onerror = rej;
-    r.readAsText(file, enc);
-  });
-  tryRead('UTF-8').then(text => {
-    // 文字化けチェック（Shift-JIS誤読パターン）
-    if (/\ufffd/.test(text)) return tryRead('Shift-JIS');
-    return text;
-  }).then(text => process(text)).catch(() => alert('ファイルの読み込みに失敗しました。'));
-}
-
-document.getElementById('fileInput').addEventListener('change', e => {
-  if (e.target.files[0]) readFile(e.target.files[0]);
-});
-const dz = document.getElementById('dropZone');
-dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
-dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
-dz.addEventListener('drop', e => {
-  e.preventDefault(); dz.classList.remove('drag-over');
-  if (e.dataTransfer.files[0]) readFile(e.dataTransfer.files[0]);
-});
-
-// ===== デモデータ =====
-window.loadDemo = function() {
-  const demo = `order_id,variation_id,product_name,user_id,owner_name1,owner_name2,owner_mail_addr,owner_zip,owner_addr1,owner_addr2,owner_addr3,owner_addr4,owner_addr5,owner_tel1,advcode_new
+window.loadDemo=function(){
+  const demo=`order_id,variation_id,product_name,user_id,owner_name1,owner_name2,owner_mail_addr,owner_zip,owner_addr1,owner_addr2,owner_addr3,owner_addr4,owner_addr5,owner_tel1,advcode_new
 1001,V001,サプリA,U001,田中,太郎,tanaka@gmail.com,100-0001,東京都,千代田区,1-1-1,,備考,03-1234-5678,ADV001
 1002,V002,サプリB,U002,サトウ,ハナコ,sato@gmail.com,222-0033,神奈川県,横浜市神奈川区,2-3,,備考,045-987-6543,ADV002
 1003,V001,サプリA,U003,山田,花子,yamada@yahoo.co.jp,999-9999,東京都,渋谷区,5-6,,備考,03-1111-2222,ADV001
@@ -762,7 +478,7 @@ window.loadDemo = function() {
 1009,V002,サプリB,U009,木村,あい,kimura@example.com,150-0002,東京都,渋谷区,代々木2-2,,備考,090-2222-3333,ADV002
 1010,V003,サプリC,U010,中村,さくら,nakamura@example.com,150-0003,東京都,渋谷区,恵比寿3-3,,備考,090-3333-4444,ADV001
 1011,V001,サプリA,U011,小林,健,kobayashi@example.com,100-0001,東京都,千代田区,1-1-1,202号室,備考,080-5555-6666,ADV003`;
-  document.getElementById('pasteArea').value = demo;
+  document.getElementById('pasteArea').value=demo;
   process(demo);
 };
 </script>
