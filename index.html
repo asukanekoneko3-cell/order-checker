@@ -321,6 +321,22 @@ function checkAddrDuplicate(addrVal, a2) {
   return null;
 }
 
+// 住所部分重複チェック（addr2の後半4文字以上がaddr3に含まれている）
+function checkAddrPartialDuplicate(addrVal, a2) {
+  if (!a2 || a2.length < 4 || !addrVal) return null;
+  const normalize = s => s.replace(/\s/g, '').replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0));
+  const normVal = normalize(addrVal);
+  const normA2  = normalize(a2);
+  // addr2の後ろから4文字〜全文字の部分文字列がaddr3に含まれているか確認
+  for (let len = normA2.length; len >= 4; len--) {
+    const suffix = normA2.slice(normA2.length - len);
+    if (normVal.includes(suffix)) {
+      return `addr2の「${suffix}」がaddr3に重複して入力されている可能性があります`;
+    }
+  }
+  return null;
+}
+
 // ===== 1行チェック =====
 function checkRow(row, hIdx, dupAddrFull, dupAddrPartial, manyCity) {
   const get = col => (hIdx[col]!==undefined&&row[hIdx[col]]!==undefined) ? row[hIdx[col]].trim() : '';
@@ -363,6 +379,9 @@ function checkRow(row, hIdx, dupAddrFull, dupAddrPartial, manyCity) {
   // 住所2重入力チェック（addr3/addr4の先頭にaddr2が含まれている）
   if(!cellErrs['owner_addr3']) e4('owner_addr3', checkAddrDuplicate(a3, a2));
   if(!cellErrs['owner_addr4']) e4('owner_addr4', checkAddrDuplicate(a4, a2));
+  // 住所部分重複チェック（addr2の後半4文字以上がaddr3に含まれている）
+  if(!cellErrs['owner_addr3']) e4('owner_addr3', checkAddrPartialDuplicate(a3, a2));
+  if(!cellErrs['owner_addr4']) e4('owner_addr4', checkAddrPartialDuplicate(a4, a2));
   e4('owner_tel1',  checkTel(get('owner_tel1')));
   e4('owner_mail_addr', checkEmail(get('owner_mail_addr')));
   e4('advcode_new', checkAdv(get('advcode_new')));
