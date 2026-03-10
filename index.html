@@ -45,9 +45,10 @@
   .upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
   .upload-text{color:var(--text-mid);font-size:13px}.upload-text strong{color:var(--accent)}
   .summary{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
-  .stat{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:10px 16px;min-width:80px}
+  .stat{background:var(--surface);border:2px solid var(--border);border-radius:8px;padding:10px 16px;min-width:80px;cursor:pointer;transition:all .15s;user-select:none}
+  .stat:hover{filter:brightness(.96);transform:translateY(-1px)}
   .stat .n{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;line-height:1}
-  .stat .l{color:var(--text-dim);font-size:10px;margin-top:3px;display:flex;align-items:center}
+  .stat .l{color:var(--text-mid);font-size:13px;margin-top:4px;display:flex;align-items:center;gap:3px}
   .stat.s1{border-color:var(--lv1);background:var(--lv1-bg)}.stat.s1 .n{color:var(--lv1)}
   .stat.s2{border-color:var(--lv2);background:var(--lv2-bg)}.stat.s2 .n{color:var(--lv2)}
   .stat.s3{border-color:var(--lv3);background:var(--lv3-bg)}.stat.s3 .n{color:var(--lv3)}
@@ -55,17 +56,15 @@
   .stat.s5{border-color:var(--lv5);background:var(--lv5-bg)}.stat.s5 .n{color:var(--lv5)}
   .stat.s6{border-color:var(--lv6);background:var(--lv6-bg)}.stat.s6 .n{color:var(--lv6)}
   .stat.s-ok .n{color:var(--ok)}
-  .toolbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-  .filter-btn{font-size:11px;font-family:'Noto Sans JP',sans-serif;padding:5px 12px;border-radius:20px;border:1.5px solid var(--border2);background:var(--surface);color:var(--text-mid);cursor:pointer;transition:all .12s;display:inline-flex;align-items:center}
-  .filter-btn:hover{border-color:var(--text);color:var(--text)}
-  .filter-btn.fa{background:var(--text);border-color:var(--text);color:#fff}
-  .filter-btn.f1.fa{background:var(--lv1);border-color:var(--lv1);color:#fff}
-  .filter-btn.f2.fa{background:var(--lv2);border-color:var(--lv2);color:#fff}
-  .filter-btn.f3.fa{background:var(--lv3);border-color:var(--lv3);color:#fff}
-  .filter-btn.f4.fa{background:var(--lv4);border-color:var(--lv4);color:#fff}
-  .filter-btn.f5.fa{background:var(--lv5);border-color:var(--lv5);color:#fff}
-  .filter-btn.f6.fa{background:var(--lv6);border-color:var(--lv6);color:#fff}
-  .filter-btn.fok.fa{background:var(--ok);border-color:var(--ok);color:#fff}
+  .stat.active{border-width:3px;box-shadow:0 0 0 2px rgba(0,0,0,.08)}
+  .stat.s1.active{box-shadow:0 0 0 2px var(--lv1)}
+  .stat.s2.active{box-shadow:0 0 0 2px var(--lv2)}
+  .stat.s3.active{box-shadow:0 0 0 2px var(--lv3)}
+  .stat.s4.active{box-shadow:0 0 0 2px var(--lv4)}
+  .stat.s5.active{box-shadow:0 0 0 2px var(--lv5)}
+  .stat.s6.active{box-shadow:0 0 0 2px var(--lv6)}
+  .stat.s-ok.active{box-shadow:0 0 0 2px var(--ok)}
+  .toolbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px}
   .spacer{flex:1}.count-info{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim)}
   .dl-btn{font-size:11px;font-family:'Noto Sans JP',sans-serif;padding:5px 12px;border-radius:6px;border:1.5px solid var(--border2);background:var(--surface);color:var(--text-mid);cursor:pointer;transition:all .12s}
   .dl-btn:hover{border-color:var(--accent);color:var(--accent)}
@@ -246,15 +245,16 @@ function P(p){return`<span class="puffy ${p} sm"></span>`;}
 function render(){
   document.getElementById('emptyState').style.display='none';document.getElementById('results').style.display='block';
   const total=G.rows.length,n=[0,1,2,3,4,5,6].map(lv=>G.rowResults.filter(r=>r.maxLv===lv).length);
+  const sa=(id)=>activeFilter===id?' active':'';
   document.getElementById('summaryArea').innerHTML=`
-    <div class="stat"><div class="n">${total}</div><div class="l">総件数</div></div>
-    <div class="stat s1"><div class="n">${n[1]}</div><div class="l">${P('p1')}住所完全一致</div></div>
-    <div class="stat s2"><div class="n">${n[2]}</div><div class="l">${P('p2')}番地一致</div></div>
-    <div class="stat s3"><div class="n">${n[3]}</div><div class="l">${P('p3')}同一市区町村3件+</div></div>
-    <div class="stat s4"><div class="n">${n[4]}</div><div class="l">${P('p4')}住所2重入力疑い</div></div>
-    <div class="stat s5"><div class="n">${n[5]}</div><div class="l">${P('p5')}住所不備</div></div>
-    <div class="stat s6"><div class="n">${n[6]}</div><div class="l">${P('p6')}入力ミス疑い</div></div>
-    <div class="stat s-ok"><div class="n">${n[0]}</div><div class="l">✓ 問題なし</div></div>`;
+    <div class="stat${sa('all')}" onclick="setFilter('all','')"><div class="n">${total}</div><div class="l">総件数</div></div>
+    <div class="stat s1${sa('lv1')}" onclick="setFilter('lv1','lv1')"><div class="n">${n[1]}</div><div class="l">${P('p1')}住所完全一致</div></div>
+    <div class="stat s2${sa('lv2')}" onclick="setFilter('lv2','lv2')"><div class="n">${n[2]}</div><div class="l">${P('p2')}番地一致</div></div>
+    <div class="stat s3${sa('lv3')}" onclick="setFilter('lv3','lv3')"><div class="n">${n[3]}</div><div class="l">${P('p3')}同一市区町村3件+</div></div>
+    <div class="stat s4${sa('lv4')}" onclick="setFilter('lv4','lv4')"><div class="n">${n[4]}</div><div class="l">${P('p4')}住所2重入力疑い</div></div>
+    <div class="stat s5${sa('lv5')}" onclick="setFilter('lv5','lv5')"><div class="n">${n[5]}</div><div class="l">${P('p5')}住所不備</div></div>
+    <div class="stat s6${sa('lv6')}" onclick="setFilter('lv6','lv6')"><div class="n">${n[6]}</div><div class="l">${P('p6')}入力ミス疑い</div></div>
+    <div class="stat s-ok${sa('ok')}" onclick="setFilter('ok','ok')"><div class="n">${n[0]}</div><div class="l">✓ 問題なし</div></div>`;
   renderTable();
 }
 function renderTable(){
@@ -267,24 +267,13 @@ function renderTable(){
   else if(activeFilter==='lv6')idx=idx.filter(i=>G.rowResults[i].maxLv===6);
   else if(activeFilter==='ok')idx=idx.filter(i=>G.rowResults[i].maxLv===0);
   else if(activeFilter==='ng')idx=idx.filter(i=>G.rowResults[i].maxLv>0);
-  const filters=[
-    {id:'all',label:'すべて',cls:'',desc:null},
-    {id:'ng',label:'問題あり',cls:'f1',desc:null},
-    {id:'lv1',label:`${P('p1')}住所完全一致`,cls:'f1',desc:'lv1'},
-    {id:'lv2',label:`${P('p2')}番地一致`,cls:'f2',desc:'lv2'},
-    {id:'lv3',label:`${P('p3')}同一市区町村`,cls:'f3',desc:'lv3'},
-    {id:'lv4',label:`${P('p4')}住所2重入力`,cls:'f4',desc:'lv4'},
-    {id:'lv5',label:`${P('p5')}住所不備`,cls:'f5',desc:'lv5'},
-    {id:'lv6',label:`${P('p6')}入力ミス`,cls:'f6',desc:'lv6'},
-    {id:'ok',label:'✓ 問題なし',cls:'fok',desc:'ok'},
-  ];
+  const cur=({lv1:'lv1',lv2:'lv2',lv3:'lv3',lv4:'lv4',lv5:'lv5',lv6:'lv6',ok:'ok'})[activeFilter];
+  if(cur)showDesc(cur);else document.getElementById('descPanel').className='desc-panel';
   document.getElementById('toolbarArea').innerHTML=
-    filters.map(f=>`<button class="filter-btn ${f.cls}${activeFilter===f.id?' fa':''}" onclick="setFilter('${f.id}','${f.desc||''}')">${f.label}</button>`).join('')
-    +`<div class="spacer"></div><span class="count-info">${idx.length} / ${G.rows.length} 件表示</span>`
+    `<span class="count-info">${idx.length} / ${G.rows.length} 件表示</span>`
+    +`<div class="spacer"></div>`
     +`<button class="dl-btn" onclick="downloadFiltered()">⬇ 表示中をDL</button>`
     +`<button class="dl-btn" onclick="downloadNg()">⬇ 問題あり行のみDL</button>`;
-  const cur=filters.find(f=>f.id===activeFilter);
-  if(cur&&cur.desc)showDesc(cur.desc);else document.getElementById('descPanel').className='desc-panel';
   document.getElementById('thead').innerHTML=`<tr><th class="sticky-col sticky-col-1">#</th><th class="sticky-col sticky-col-2">状態</th>${G.headers.map((h,i)=>{const sc=i===0?'sticky-col sticky-col-3':'';return`<th${sc?' class="'+sc+'"':''}>${esc(h)}</th>`;}).join('')}</tr>`;
   const tbody=document.getElementById('tbody');
   if(idx.length===0){tbody.innerHTML=`<tr><td colspan="${G.headers.length+2}" style="text-align:center;color:var(--text-dim);padding:28px">該当する行がありません</td></tr>`;return;}
@@ -306,7 +295,7 @@ function renderTable(){
   }
   tbody.innerHTML=html;
 }
-function setFilter(f,desc){activeFilter=f;renderTable();}
+function setFilter(f,desc){activeFilter=f;render();}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function toCSV(i){const l=[G.headers.join(',')];i.forEach(j=>l.push(G.rows[j].map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')));return'\uFEFF'+l.join('\n');}
 function dlCSV(c,n){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([c],{type:'text/csv;charset=utf-8;'}));a.download=n;a.click();}
