@@ -111,9 +111,10 @@
   td.c4.sticky-col{background:var(--lv4-cell)!important}
   td.c5.sticky-col{background:var(--lv5-cell)!important}
   td.c6.sticky-col{background:var(--lv6-cell)!important}
-  th.sticky-col-1,td.sticky-col-1{left:0;min-width:38px}
-  th.sticky-col-2,td.sticky-col-2{left:38px;min-width:80px}
-  th.sticky-col-3,td.sticky-col-3{left:118px;min-width:90px;border-right:2px solid var(--border2)}
+  th.sticky-col-1,td.sticky-col-1{left:0;min-width:34px}
+  th.sticky-col-2,td.sticky-col-2{left:34px;min-width:38px}
+  th.sticky-col-3,td.sticky-col-3{left:72px;min-width:80px}
+  th.sticky-col-4,td.sticky-col-4{left:152px;min-width:90px;border-right:2px solid var(--border2)}
   td.c1{background:var(--lv1-cell);color:var(--lv1);font-weight:500}td.c2{background:var(--lv2-cell);color:var(--lv2);font-weight:500}
   td.c3{background:var(--lv3-cell);color:var(--lv3);font-weight:500}td.c4{background:var(--lv4-cell);color:var(--lv4);font-weight:500}
   td.c5{background:var(--lv5-cell);color:var(--lv5);font-weight:500}td.c6{background:var(--lv6-cell);color:var(--lv6);font-weight:500}
@@ -133,6 +134,11 @@
   .proc-text strong{color:var(--text)}
   .proc-text code{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:1px 5px;color:var(--accent)}
   .proc-note{display:block;font-size:12px;color:var(--text-dim);margin-top:2px}
+  .empty{text-align:center;padding:60px 20px;color:var(--text-dim)}.empty .icon{font-size:38px;margin-bottom:10px}
+  th.col-check,td.col-check{width:34px;text-align:center;padding:4px 6px}
+  td.col-check input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:var(--ok)}
+  tr.row-done td{opacity:.3;background:var(--surface2)!important}
+  tr.row-done td.sticky-col{background:var(--surface2)!important}
 </style>
 </head>
 <body>
@@ -216,6 +222,10 @@ function chkTel(v){if(isEmpty(v))return'電話番号が空欄です';if(!/^0\d{9
 function chkEmail(v){if(isEmpty(v))return'メールアドレスが空欄です';if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()))return'メールアドレスの形式が不正です';return null;}
 function chkAdv(v){return isEmpty(v)?'広告コードが空欄です':null;}
 function chkDigits(v){if(/\d{5,}/.test(normNum(v)))return'住所に5桁以上の連続した数字があります（電話番号等の混入疑い）';return null;}
+function chkPrefInAddr(v,a1){if(!v||!a1)return null;if(v.replace(/\s/g,'').includes(a1.replace(/\s/g,'')))return`住所欄に都道府県名「${a1}」が混入しています`;return null;}
+function chkSymbol(v){if(!v)return null;if(/[！？（）【】『』・～／＊＆％＄＠◎○●◆◇■□▲△▼▽☆★♪♦♥♠♣]/.test(v))return'住所に不正な記号が含まれています';return null;}
+function chkAddr4NoNum(v){if(!v||!v.trim())return null;if(!/[\d０-９]/.test(v))return'建物名のみで号室（数字）が入力されていません';return null;}
+function chkAddr3Short(v){if(!v||v.trim().length>=2)return null;return'番地（addr3）が1文字以下です';}
 function chkDupFull(addr,a2){if(!a2||a2.length<4||!addr)return null;if(addr.replace(/\s/g,'').startsWith(a2.replace(/\s/g,'')))return'市区町村名（addr2）がそのまま重複して入力されている可能性があります';return null;}
 function chkDupPart(addr,a2){if(!a2||a2.length<4||!addr)return null;const nv=addr.replace(/\s/g,''),na=a2.replace(/\s/g,'');for(let l=na.length;l>=4;l--){const s=na.slice(na.length-l);if(nv.includes(s))return`addr2の「${s}」がaddr3に重複して入力されている可能性があります`;}return null;}
 function checkRow(row,hIdx,sets,maps){
@@ -233,9 +243,17 @@ function checkRow(row,hIdx,sets,maps){
   const e4=(c,m)=>{if(m)set(c,4,m);};
   if(!errs['owner_addr3'])e4('owner_addr3',chkDupFull(a3,a2));if(!errs['owner_addr4'])e4('owner_addr4',chkDupFull(a4,a2));
   if(!errs['owner_addr3'])e4('owner_addr3',chkDupPart(a3,a2));if(!errs['owner_addr4'])e4('owner_addr4',chkDupPart(a4,a2));
+  if(!errs['owner_addr2'])e4('owner_addr2',chkPrefInAddr(a2,a1));
+  if(!errs['owner_addr3'])e4('owner_addr3',chkPrefInAddr(a3,a1));
+  if(!errs['owner_addr4'])e4('owner_addr4',chkPrefInAddr(a4,a1));
+  if(!errs['owner_addr2'])e4('owner_addr2',chkSymbol(a2));
+  if(!errs['owner_addr3'])e4('owner_addr3',chkSymbol(a3));
+  if(!errs['owner_addr4'])e4('owner_addr4',chkSymbol(a4));
   const e5=(c,m)=>{if(m)set(c,5,m);};
   if(!errs['owner_addr3']&&!errs['owner_addr4']){const b=hasBanchi(a1+a2+a3+a4)?null:'住所全体に番地（数字）が含まれていません';if(b)e5('owner_addr3',b);}
   if(!errs['owner_addr2'])e5('owner_addr2',chkDigits(a2));if(!errs['owner_addr3'])e5('owner_addr3',chkDigits(a3));if(!errs['owner_addr4'])e5('owner_addr4',chkDigits(a4));
+  if(!errs['owner_addr4'])e5('owner_addr4',chkAddr4NoNum(a4));
+  if(!errs['owner_addr3'])e5('owner_addr3',chkAddr3Short(a3));
   const e6=(c,m)=>{if(m)set(c,6,m);};
   e6('owner_name1',chkName(get('owner_name1'),'姓'));e6('owner_name2',chkName(get('owner_name2'),'名'));
   e6('owner_zip',chkZip(get('owner_zip')));e6('owner_addr1',chkPref(a1));e6('owner_addr2',chkCity(a2));
@@ -246,6 +264,7 @@ function checkRow(row,hIdx,sets,maps){
 }
 let G={headers:[],rows:[],rowResults:[],hIdx:{},cityCnt:{}};
 let activeFilter='all';
+const checkedRows=new Set();
 function process(text){
   const parsed=parseCSV(text);if(!parsed){alert('CSVの解析に失敗しました。');return;}
   G.headers=parsed.headers;G.rows=parsed.rows;G.hIdx={};G.headers.forEach((h,i)=>{G.hIdx[h]=i;});
@@ -293,7 +312,7 @@ function renderTable(){
     +`<div class="spacer"></div>`
     +`<button class="dl-btn" onclick="downloadFiltered()">⬇ 表示中をDL</button>`
     +`<button class="dl-btn" onclick="downloadNg()">⬇ 問題あり行のみDL</button>`;
-  document.getElementById('thead').innerHTML=`<tr><th class="sticky-col sticky-col-1">#</th><th class="sticky-col sticky-col-2">状態</th>${G.headers.map((h,i)=>{const sc=i===0?'sticky-col sticky-col-3':'';return`<th${sc?' class="'+sc+'"':''}>${esc(h)}</th>`;}).join('')}</tr>`;
+  document.getElementById('thead').innerHTML=`<tr><th class="col-check sticky-col sticky-col-1"></th><th class="sticky-col sticky-col-2">#</th><th class="sticky-col sticky-col-3">状態</th>${G.headers.map((h,i)=>{const sc=i===0?'sticky-col sticky-col-4':'';return`<th${sc?' class="'+sc+'"':''}>${esc(h)}</th>`;}).join('')}</tr>`;
   const tbody=document.getElementById('tbody');
   if(idx.length===0){tbody.innerHTML=`<tr><td colspan="${G.headers.length+2}" style="text-align:center;color:var(--text-dim);padding:28px">該当する行がありません</td></tr>`;return;}
   const ADDR_WIDE=new Set(['owner_addr2','owner_addr3','owner_addr4']);
@@ -306,13 +325,19 @@ function renderTable(){
       const val=row[ci]!==undefined?row[ci]:'',err=cellErrs[h];
       const sc=SHORT.has(h)?' col-short':'';
       const ac=ADDR_WIDE.has(h)?' col-addr':'';
-      const stk=ci===0?' sticky-col sticky-col-3':'';
+      const stk=ci===0?' sticky-col sticky-col-4':'';
       if(!err)return`<td class="${(sc+ac+stk).trim()}">${esc(val)}</td>`;
       return`<td class="c${err.lv}${sc}${ac}${stk}" data-tip="${esc(err.msg)}" title="${esc(err.msg)}">${esc(val)||'&nbsp;'}</td>`;
     }).join('');
-    html+=`<tr><td class="row-n sticky-col sticky-col-1">${ri+2}</td><td class="sticky-col sticky-col-2">${BADGE[maxLv]||BADGE[0]}</td>${cells}</tr>`;
+    const done=checkedRows.has(ri);
+    html+=`<tr class="${done?'row-done':''}"><td class="col-check sticky-col sticky-col-1"><input type="checkbox" ${done?'checked':''} onchange="toggleCheck(${ri},this)"></td><td class="row-n sticky-col sticky-col-2">${ri+2}</td><td class="sticky-col sticky-col-3">${BADGE[maxLv]||BADGE[0]}</td>${cells}</tr>`;
   }
   tbody.innerHTML=html;
+}
+function toggleCheck(ri,el){
+  if(el.checked)checkedRows.add(ri);else checkedRows.delete(ri);
+  const tr=el.closest('tr');
+  tr.className=el.checked?'row-done':'';
 }
 function setFilter(f,desc){activeFilter=f;render();}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
