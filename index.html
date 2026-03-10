@@ -90,18 +90,26 @@
   .table-wrap{overflow:auto;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);max-height:calc(100vh - 360px)}
   table{width:100%;border-collapse:collapse;font-size:12px}
   thead th{background:var(--surface2);color:var(--text-mid);font-weight:500;padding:8px 10px;text-align:left;position:sticky;top:0;z-index:10;border-bottom:1.5px solid var(--border);white-space:nowrap;font-size:11px;font-family:'JetBrains Mono',monospace}
+  thead th.sticky-col{z-index:20}
   tbody tr{border-bottom:1px solid var(--border)}
   tbody tr:hover td{background-color:rgba(0,0,0,.015)!important}
+  tbody tr:hover td.sticky-col{background-color:rgba(0,0,0,.015)!important}
   td{padding:6px 10px;vertical-align:middle;white-space:nowrap;max-width:400px;overflow:hidden;text-overflow:ellipsis}
   td.col-short{max-width:120px}td.row-n{color:var(--text-dim);font-family:'JetBrains Mono',monospace;font-size:10px;min-width:38px}
   td.col-addr{max-width:none;min-width:200px}
-  th.sticky-col,td.sticky-col{position:sticky;z-index:5;background:var(--surface2)}
+  th.sticky-col,td.sticky-col{position:sticky;z-index:5;background:var(--surface)}
+  thead th.sticky-col{background:var(--surface2);z-index:20}
   td.sticky-col{background:var(--surface)}
-  tbody tr:hover td.sticky-col{background-color:rgba(0,0,0,.015)!important}
+  tbody tr:hover td.sticky-col{background-color:rgba(245,244,240,1)!important}
+  td.c1.sticky-col{background:var(--lv1-cell)!important}
+  td.c2.sticky-col{background:var(--lv2-cell)!important}
+  td.c3.sticky-col{background:var(--lv3-cell)!important}
+  td.c4.sticky-col{background:var(--lv4-cell)!important}
+  td.c5.sticky-col{background:var(--lv5-cell)!important}
+  td.c6.sticky-col{background:var(--lv6-cell)!important}
   th.sticky-col-1,td.sticky-col-1{left:0;min-width:38px}
   th.sticky-col-2,td.sticky-col-2{left:38px;min-width:80px}
   th.sticky-col-3,td.sticky-col-3{left:118px;min-width:90px;border-right:2px solid var(--border2)}
-  td.c1.sticky-col,td.c2.sticky-col,td.c3.sticky-col,td.c4.sticky-col,td.c5.sticky-col,td.c6.sticky-col{background:inherit}
   td.c1{background:var(--lv1-cell);color:var(--lv1);font-weight:500}td.c2{background:var(--lv2-cell);color:var(--lv2);font-weight:500}
   td.c3{background:var(--lv3-cell);color:var(--lv3);font-weight:500}td.c4{background:var(--lv4-cell);color:var(--lv4);font-weight:500}
   td.c5{background:var(--lv5-cell);color:var(--lv5);font-weight:500}td.c6{background:var(--lv6-cell);color:var(--lv6);font-weight:500}
