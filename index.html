@@ -137,8 +137,8 @@
   .empty{text-align:center;padding:60px 20px;color:var(--text-dim)}.empty .icon{font-size:38px;margin-bottom:10px}
   th.col-check,td.col-check{width:34px;text-align:center;padding:4px 6px}
   td.col-check input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:var(--ok)}
-  tr.row-done td{opacity:.3;background:var(--surface2)!important}
-  tr.row-done td.sticky-col{background:var(--surface2)!important}
+  tr.row-done td{background:#e8e8e4!important;color:#aaa!important}
+  tr.row-done td.sticky-col{background:#e8e8e4!important}
 </style>
 </head>
 <body>
@@ -186,8 +186,8 @@ const DESC={
   lv1:{cls:'dp1',p:'p1',title:'住所完全一致',items:['異なる注文IDで住所（都道府県〜部屋番号）が完全に一致','同一住所への複数申込の可能性あり']},
   lv2:{cls:'dp2',p:'p2',title:'番地一致',items:['異なる注文IDで都道府県・市区町村・番地が一致','建物名・部屋番号のみ異なる状態']},
   lv3:{cls:'dp3',p:'p3',title:'同一市区町村（3件以上）',items:['異なる注文IDで同じ市区町村から3件以上の申込']},
-  lv4:{cls:'dp4',p:'p4',title:'住所2重入力の疑い',items:['addr2の内容がaddr3またはaddr4に重複して入力されている可能性あり','例：addr2「京都市北区小山下総町」／addr3「京都市北区小山下総町29-15」']},
-  lv5:{cls:'dp5',p:'p5',title:'住所不備',items:['住所全体に番地（数字）が含まれていない','住所欄に電話番号が混入している（5桁以上の連続数字）']},
+  lv4:{cls:'dp4',p:'p4',title:'住所2重入力の疑い',items:['addr2の内容がaddr3またはaddr4に重複して入力されている可能性あり（例：addr2「京都市北区小山下総町」／addr3「京都市北区小山下総町29-15」）','addr2／addr3／addr4に都道府県名が混入している（例：addr3に「福岡県1-20-20」と入力されている）','addr2／addr3／addr4に不正な記号（！？（）【】・～など）が含まれている']},
+  lv5:{cls:'dp5',p:'p5',title:'住所不備',items:['住所全体に番地（数字）が含まれていない','住所欄に電話番号が混入している（5桁以上の連続数字）','addr4に内容があるのに数字（号室）が含まれていない（マンション名のみの入力）','addr3が1文字以下（番地が正しく入力されていない可能性あり）']},
   lv6:{cls:'dp6',p:'p6',title:'入力ミスの疑い',tags:['名前がカタカナ','メールアドレス形式不備','電話番号桁数・形式不備','郵便番号が7桁でない','広告コードが空欄']},
   ok:{cls:'dpok',p:'pok',title:'問題なし',items:['チェックした項目に問題は見つかりませんでした']},
 };
