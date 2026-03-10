@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>新規注文不備チェック</title>
+<link rel="icon" href="favicon.ico">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap');
   :root {
@@ -93,6 +94,14 @@
   tbody tr:hover td{background-color:rgba(0,0,0,.015)!important}
   td{padding:6px 10px;vertical-align:middle;white-space:nowrap;max-width:400px;overflow:hidden;text-overflow:ellipsis}
   td.col-short{max-width:120px}td.row-n{color:var(--text-dim);font-family:'JetBrains Mono',monospace;font-size:10px;min-width:38px}
+  td.col-addr{max-width:none;min-width:200px}
+  th.sticky-col,td.sticky-col{position:sticky;z-index:5;background:var(--surface2)}
+  td.sticky-col{background:var(--surface)}
+  tbody tr:hover td.sticky-col{background-color:rgba(0,0,0,.015)!important}
+  th.sticky-col-1,td.sticky-col-1{left:0;min-width:38px}
+  th.sticky-col-2,td.sticky-col-2{left:38px;min-width:80px}
+  th.sticky-col-3,td.sticky-col-3{left:118px;min-width:90px;border-right:2px solid var(--border2)}
+  td.c1.sticky-col,td.c2.sticky-col,td.c3.sticky-col,td.c4.sticky-col,td.c5.sticky-col,td.c6.sticky-col{background:inherit}
   td.c1{background:var(--lv1-cell);color:var(--lv1);font-weight:500}td.c2{background:var(--lv2-cell);color:var(--lv2);font-weight:500}
   td.c3{background:var(--lv3-cell);color:var(--lv3);font-weight:500}td.c4{background:var(--lv4-cell);color:var(--lv4);font-weight:500}
   td.c5{background:var(--lv5-cell);color:var(--lv5);font-weight:500}td.c6{background:var(--lv6-cell);color:var(--lv6);font-weight:500}
@@ -264,20 +273,24 @@ function renderTable(){
     +`<button class="dl-btn" onclick="downloadNg()">⬇ 問題あり行のみDL</button>`;
   const cur=filters.find(f=>f.id===activeFilter);
   if(cur&&cur.desc)showDesc(cur.desc);else document.getElementById('descPanel').className='desc-panel';
-  document.getElementById('thead').innerHTML=`<tr><th>#</th><th>状態</th>${G.headers.map(h=>`<th>${esc(h)}</th>`).join('')}</tr>`;
+  document.getElementById('thead').innerHTML=`<tr><th class="sticky-col sticky-col-1">#</th><th class="sticky-col sticky-col-2">状態</th>${G.headers.map((h,i)=>{const sc=i===0?'sticky-col sticky-col-3':'';return`<th${sc?' class="'+sc+'"':''}>${esc(h)}</th>`;}).join('')}</tr>`;
   const tbody=document.getElementById('tbody');
   if(idx.length===0){tbody.innerHTML=`<tr><td colspan="${G.headers.length+2}" style="text-align:center;color:var(--text-dim);padding:28px">該当する行がありません</td></tr>`;return;}
+  const ADDR_WIDE=new Set(['owner_addr2','owner_addr3','owner_addr4']);
   const SHORT=new Set(['order_id','variation_id','user_id']);
   const BADGE={1:`<span class="badge b1">${P('p1')}住所完全一致</span>`,2:`<span class="badge b2">${P('p2')}番地一致</span>`,3:`<span class="badge b3">${P('p3')}同一市区町村3件+</span>`,4:`<span class="badge b4">${P('p4')}住所2重入力疑い</span>`,5:`<span class="badge b5">${P('p5')}住所不備</span>`,6:`<span class="badge b6">${P('p6')}入力ミス疑い</span>`,0:`<span class="bok">✓</span>`};
   let html='';
   for(const ri of idx){
     const row=G.rows[ri],{cellErrs,maxLv}=G.rowResults[ri];
     const cells=G.headers.map((h,ci)=>{
-      const val=row[ci]!==undefined?row[ci]:'',err=cellErrs[h],sc=SHORT.has(h)?' col-short':'';
-      if(!err)return`<td class="${sc.trim()}">${esc(val)}</td>`;
-      return`<td class="c${err.lv}${sc}" data-tip="${esc(err.msg)}" title="${esc(err.msg)}">${esc(val)||'&nbsp;'}</td>`;
+      const val=row[ci]!==undefined?row[ci]:'',err=cellErrs[h];
+      const sc=SHORT.has(h)?' col-short':'';
+      const ac=ADDR_WIDE.has(h)?' col-addr':'';
+      const stk=ci===0?' sticky-col sticky-col-3':'';
+      if(!err)return`<td class="${(sc+ac+stk).trim()}">${esc(val)}</td>`;
+      return`<td class="c${err.lv}${sc}${ac}${stk}" data-tip="${esc(err.msg)}" title="${esc(err.msg)}">${esc(val)||'&nbsp;'}</td>`;
     }).join('');
-    html+=`<tr><td class="row-n">${ri+2}</td><td>${BADGE[maxLv]||BADGE[0]}</td>${cells}</tr>`;
+    html+=`<tr><td class="row-n sticky-col sticky-col-1">${ri+2}</td><td class="sticky-col sticky-col-2">${BADGE[maxLv]||BADGE[0]}</td>${cells}</tr>`;
   }
   tbody.innerHTML=html;
 }
